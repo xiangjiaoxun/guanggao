@@ -1,0 +1,21 @@
+#!name = 广告联盟拦截插件
+#!desc = 精准拦截腾讯广点通(GDT)和快手广告联盟，去除开屏及信息流广告。
+#!author = Gemini
+#!icon = https://raw.githubusercontent.com/Loon0x00/LoonExampleConfig/master/Icon/Reject.png
+#!date = 2026-07-05 21:20:00
+
+[Rule]
+# === 腾讯广点通 (GDT) 广告联盟拦截 ===
+# 拦截你抓到的竞价通知
+DOMAIN, win.gdt.qq.com, REJECT
+# 拦截广点通其他常见的广告下发和追踪域名
+DOMAIN, v.gdt.qq.com, REJECT
+DOMAIN, mi.gdt.qq.com, REJECT
+DOMAIN, pgdt.gtimg.cn, REJECT
+
+# === 快手广告联盟拦截 ===
+# 拦截你抓到的日志上报
+DOMAIN, open.e.kuaishou.com, REJECT
+# 拦截快手广告的核心域名
+DOMAIN, e.kuaishou.com, REJECT
+DOMAIN-SUFFIX, e.kuaishou.com, REJECT
