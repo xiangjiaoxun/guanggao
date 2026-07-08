@@ -1,15 +1,17 @@
 [Plugin]
-name = Bilibili 去广告与数据追踪
-desc = 依据流量日志定制，拦截 APM 性能追踪、行为数据上报接口以及 HTTPDNS 服务，防止广告精准下发。
+name = Bilibili 精准去广告重写
+desc = 拦截秒针第三方追踪，并通过 JS 脚本动态清空 cm.bilibili.com 的卡片广告与开屏广告缓存数据。
 author = xiangjiaoxun
 homepage = https://github.com/xiangjiaoxun/guanggao
-version = 1.0.0
+version = 1.1.0
+
+[Script]
+# 拦截并重写 B 站核心广告分发接口
+http-response ^https?:\/\/cm\.bilibili\.com\/cm\/api\/(fees\/wise|conversion\/mobile\/v2) script-path=https://raw.githubusercontent.com/xiangjiaoxun/guanggao/main/bilibili.js, requires-body=true, timeout=10, tag=Bilibili广告重写
 
 [Rule]
-# 拦截日志中发现的 APM 数据上报与行为追踪
-URL-REGEX, ^https?:\/\/api\.bilibili\.com\/open\/monitor\/apm\/report, REJECT
-# 拦截 HTTPDNS 服务（强制客户端回退标准 DNS，以使常规防扩散/广告规则生效）
-DOMAIN, httpdns.bilivideo.com, REJECT
+# 拦截秒针等第三方广告追踪埋点
+DOMAIN-SUFFIX, miaozhen.com, REJECT
 
 [MITM]
-hostname = api.bilibili.com, httpdns.bilivideo.com
+hostname = cm.bilibili.com
