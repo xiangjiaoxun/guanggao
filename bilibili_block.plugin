@@ -1,0 +1,15 @@
+[Plugin]
+name = Bilibili 去广告与数据追踪
+desc = 依据流量日志定制，拦截 APM 性能追踪、行为数据上报接口以及 HTTPDNS 服务，防止广告精准下发。
+author = xiangjiaoxun
+homepage = https://github.com/xiangjiaoxun/guanggao
+version = 1.0.0
+
+[Rule]
+# 拦截日志中发现的 APM 数据上报与行为追踪
+URL-REGEX, ^https?:\/\/api\.bilibili\.com\/open\/monitor\/apm\/report, REJECT
+# 拦截 HTTPDNS 服务（强制客户端回退标准 DNS，以使常规防扩散/广告规则生效）
+DOMAIN, httpdns.bilivideo.com, REJECT
+
+[MITM]
+hostname = api.bilibili.com, httpdns.bilivideo.com
