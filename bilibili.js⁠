@@ -1,0 +1,39 @@
+/**
+ * Bilibili 广告响应体清理脚本
+ * 针对 cm.bilibili.com 下发的广告数据进行核心置空
+ */
+
+let body = $response.body;
+
+try {
+    let obj = JSON.parse(body);
+    
+    // 如果返回数据中包含 data 核心字段
+    if (obj.data) {
+        if (Array.isArray(obj.data)) {
+            // 如果 data 本身是广告数组，直接清空
+            obj.data = [];
+        } else if (typeof obj.data === 'object') {
+            // 清理常见的广告下发数组字段
+            if (obj.data.ad_list) obj.data.ad_list = [];
+            if (obj.data.ads) obj.data.ads = [];
+            
+            // 遍历所有属性，如果是数组则一律清空（防止 B 站频繁更换广告控制字段名）
+            for (let key in obj.data) {
+                if (Array.isArray(obj.data[key])) {
+                    obj.data[key] = [];
+                }
+            }
+        }
+    }
+    
+    // 保持接口返回状态码正常，但内容无广告
+    if (obj.code !== undefined) obj.code = 0;
+    
+    body = JSON.stringify(obj);
+} catch (e) {
+    // 如果解析 JSON 失败，则不作修改返回原数据
+    console.log("Bilibili广告脚本解析失败: " + e);
+}
+
+$done({ body });
